@@ -7,6 +7,9 @@
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -23,10 +26,42 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
+
+    <div class="container">
+      <div class="jumbotron">
+        <h1>chatterbox</h1>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Choose Room
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">test</a></li>
+
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Send a message">
+
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-primary">Send Message</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+          <div class="well"></div>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+      </div>
       <!-- Your HTML goes here! -->
     </div>
-    <div id="chats"></div>
+    <!-- <div id="chats"></div> -->
   </body>
 </html>
