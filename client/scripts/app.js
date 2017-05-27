@@ -1,6 +1,8 @@
 // YOUR CODE HERE:
 //$(document).ready(function() {
   var app = {
+    friends: [],
+
     send: function(message) {
       $.ajax({
         url: 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages',
@@ -23,19 +25,24 @@
     },
 
     fetch: function() {
-      $.ajax({
-        //url: 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages',
+      var fetchObj = $.ajax({
+        url: 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages',
         type: 'GET',
         //data: JSON.stringify(message),
         contentType: 'application/json',
         success: function (data) {
-          console.log('chatterbox: Message sent');
+          console.log('chatterbox: Fetch executed');
         },
         error: function (data) {
           // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-          console.error('chatterbox: Failed to send message', data);
+          console.error('chatterbox: Failed to fetch', data);
         }
       });
+
+      return fetchObj.responseJSON;
+      //grab the array of messages  ---> return it
+      //iterate over the array of messages
+        //call app.renderMessage(messages[i])
     },
 
     clearMessages: function() {
@@ -43,11 +50,25 @@
     },
 
     renderMessage: function(message) {
-      var $newMsg = $('<div></div>');
-      var newMsgUser = 'user-' + message.username;
-      $newMsg.addClass(newMsgUser);
-      $newMsg.text(message.user + ': ' + message.text);
+      var $newMsg = $(
+        `<div class="panel panel-default">
+          <div class="panel-heading username">${message.username}
+          </div>
+          <div class="panel-body">${message.text}</div>
+        </div>
+        `);
+
+      var $usernameTxt = $('.username').text();
+      if (app.friends.includes($usernameTxt)) {
+        $newMsg.find('.panel-heading').addClass('friend');
+      }
+
       $('#chats').prepend($newMsg);
+
+      $('.username').on('click', function () {
+        console.log('username was clicked');
+        app.handleUsernameClick($('.username').text());
+      });
     },
 
     renderRoom: function (roomName) {
@@ -56,7 +77,28 @@
       $('#roomSelect').prepend($newRoom);
       $('.room-display').text(roomName);
 
+    },
+
+    handleUsernameClick: function(username) {
+      var friends = this.friends;
+      if (!friends.includes(username)) {
+        friends.push(username);
+      }
+    },
+
+    handleSubmit: function() {
+      var message = {};
+      message.username = window.location.search.slice(10);
+      message.text = $('#message')[0].value;
+      message.roomname = $('.room-display').text();
+
+      //this.send(message);
+      console.log('handleSubmit was called: ', message);
+
+      $('#message')[0].value = '';
     }
+
+
   };
 
   $(document).ready( function () {
@@ -68,20 +110,23 @@
     var $currentRoom = $('.dropdown-toggle'); //dropdown menu button denoting the current room
     var $roomDisplay = $('.room-display'); //displays room name
     var message = undefined;
-    var username = window.location.search.slice(10);
+    //var username = window.location.search.slice(10);
     $submitBtn.on('click', function() {
-      message = {
-        username: username,
-        text: $messageBox[0].value,
-        roomname: $roomDisplay.text()
-      };
-      app.send(message);
+      console.log('submit button clicked, message is:', $('#message')[0].value);
+      if ($('#message')[0].value !== undefined) {
+        app.handleSubmit();
+      }
+
     });
+
     $('.create-room').on('click', function() {
       console.log('click got there.');
       app.renderRoom(prompt('Enter room name'));
     });
+
   });
+
+
 
 
 
