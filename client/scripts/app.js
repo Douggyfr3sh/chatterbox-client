@@ -1,5 +1,4 @@
 // YOUR CODE HERE:
-//$(document).ready(function() {
   var app = {
     friends: {},
     server: 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages',
@@ -29,9 +28,9 @@
       app.fetch();
 
 
-      setInterval(function() {
+      setInterval( () => {
         app.fetch();
-      }, 3000);
+      }, 300);
     },
 
     fetch: function() {
@@ -39,14 +38,10 @@
         url: app.server,
         type: 'GET',
         data: {order: '-createdAt'},
-        //data: JSON.stringify(message),
-        //contentType: 'application/json',
         success: function (data) {
-          // if (!data || !data[0]) {
-          //   return;
-          // }
-          //update dom if new messages are available
-          //if (mostRecentMessage.objectId !== app.lastMessageId)
+          if (!data) {
+            return;
+          }
           app.messages = data.results.slice();
           app.renderMessages(data.results, app.roomName);
           app.renderRoomList(app.messages);
@@ -57,11 +52,6 @@
           console.error('chatterbox: Failed to fetch', data);
         }
       });
-
-      //return fetchObj;
-      //grab the array of messages  ---> return it
-      //iterate over the array of messages
-        //call app.renderMessage(messages[i])
     },
 
     clearMessages: function() {
@@ -72,7 +62,6 @@
       $('#chats').html('');
 
       messages.forEach(function(message) {
-
         app.renderMessage(message, roomName);
       });
     },
@@ -82,11 +71,8 @@
       if (message.roomname !== roomName) {
         return;
       }
-      // if (app.messages.length > 100) {
-      //   app.messages.pop();
-      // }
       var $newMsg = $(
-        `<div class="panel panel-default">
+        `<div class="panel panel-info">
           <div class="panel-heading username">
           </div>
           <div class="panel-body"></div>
@@ -105,7 +91,6 @@
       $('#chats').prepend($newMsg);
 
       $newMsg.find('.username').on('click', function () {
-        console.log('username was clicked');
         app.handleUsernameClick($newMsg.find('.username').text());
       });
     },
@@ -150,8 +135,6 @@
       message.roomname = app.roomName;
 
       this.send(message);
-      console.log('handleSubmit was called: ', message);
-
       $('#message')[0].value = '';
     }
 
@@ -161,6 +144,7 @@
   };
 
   $(document).ready( function () {
+    app.init();
     var $submitBtn = $('.submit'); //submit button
     var $messageBox = $('.form-control'); //message box
     var $messageFeed = $('#chats'); //message Feed
@@ -170,17 +154,17 @@
     var $roomDisplay = $('.room-display'); //displays room name
     var message = undefined;
     //var username = window.location.search.slice(10);
-    app.init();
-    $submitBtn.on('click', function() {
-      console.log('submit button clicked, message is:', $('#message')[0].value);
+
+    //Use ES6 arrow functions for anonymous click event handler functions.
+
+    $submitBtn.on('click', () => {
       if ($('#message')[0].value !== undefined) {
         app.handleSubmit();
       }
 
     });
 
-    $('.create-room').on('click', function() {
-      console.log('click got there.');
+    $('.create-room').on('click', () => {
       var newRoom = prompt('Enter room name');
       if (!app.roomList.hasOwnProperty(newRoom)) {
         app.renderRoom(newRoom);
