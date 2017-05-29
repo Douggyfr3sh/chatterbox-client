@@ -78,6 +78,7 @@
           <div class="panel-body"></div>
         </div>
         `);
+      //Use jquery.text method to escape user input to prevent XSS attacks!
       $newMsg.find('.panel-heading').text(message.username);
       $newMsg.find('.panel-body').text(message.text);
 
@@ -96,7 +97,7 @@
     },
 
     renderRoom: function (roomName) {
-      $newRoom = $('<li><a href="#"></a></li>');
+      $newRoom = $(`<li><a href="#"></a></li>`);
       $newRoom.children().text(roomName);
       $newRoom.on('click', function() {
         app.roomName = roomName;
@@ -145,19 +146,10 @@
 
   $(document).ready( function () {
     app.init();
-    var $submitBtn = $('.submit'); //submit button
-    var $messageBox = $('.form-control'); //message box
-    var $messageFeed = $('#chats'); //message Feed
-    var $testRoom = $('.room-test'); //Room Pattern
-    var $createRoom = $('.create-room'); //create a new room dropdown button
-    var $currentRoom = $('.dropdown-toggle'); //dropdown menu button denoting the current room
-    var $roomDisplay = $('.room-display'); //displays room name
-    var message = undefined;
-    //var username = window.location.search.slice(10);
 
     //Use ES6 arrow functions for anonymous click event handler functions.
 
-    $submitBtn.on('click', () => {
+    $('.submit').on('click', () => {
       if ($('#message')[0].value !== undefined) {
         app.handleSubmit();
       }
@@ -170,8 +162,6 @@
         app.renderRoom(newRoom);
         app.roomList[newRoom] = true;
       }
-
-
     });
 
   });
