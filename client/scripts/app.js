@@ -91,7 +91,7 @@
       $newMsg.text();
       $('#chats').prepend($newMsg);
 
-      $newMsg.find('.username').on('click', function () {
+      $newMsg.find('.username').on('click', () => {
         app.handleUsernameClick($newMsg.find('.username').text());
       });
     },
@@ -99,7 +99,7 @@
     renderRoom: function (roomName) {
       $newRoom = $(`<li><a href="#"></a></li>`);
       $newRoom.children().text(roomName);
-      $newRoom.on('click', function() {
+      $newRoom.on('click', () => {
         app.roomName = roomName;
         $('.room-display').text(app.roomName);
         app.renderMessages(app.messages, app.roomName);
